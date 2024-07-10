@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habittracker_flutter/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'pages.dart/home_page.dart';
+import 'pages/home_page.dart';
 
 void main() {
   runApp(
