@@ -52,7 +52,7 @@ void _appSettingsSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.initLaunchdate);
+  writer.writeDateTime(offsets[0], object.initLaunchDate);
 }
 
 AppSettings _appSettingsDeserialize(
@@ -63,7 +63,7 @@ AppSettings _appSettingsDeserialize(
 ) {
   final object = AppSettings();
   object.id = id;
-  object.initLaunchdate = reader.readDateTimeOrNull(offsets[0]);
+  object.initLaunchDate = reader.readDateTimeOrNull(offsets[0]);
   return object;
 }
 
