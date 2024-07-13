@@ -44,19 +44,6 @@ class HabitDatabase extends ChangeNotifier {
   /* List of habits */
   final List<Habit> currentHabits = [];
 
-  /* Add new habits */
-  Future<void> addHabit(String habitName) async {
-    // create new habit
-    final newHabit = Habit()..name = habitName;
-
-    // add habit to db
-    await isar.writeTxn(
-      () => isar.habits.put(newHabit),
-    );
-    // re-render from db
-    readHabits();
-  }
-
   /* Read Habits */
   Future<void> readHabits() async {
     // fetch all habits in db
@@ -68,6 +55,19 @@ class HabitDatabase extends ChangeNotifier {
 
     // update UI
     notifyListeners();
+  }
+
+  /* Add new habits */
+  Future<void> addHabit(String habitName) async {
+    // create new habit
+    final newHabit = Habit()..name = habitName;
+
+    // add habit to db
+    await isar.writeTxn(
+      () => isar.habits.put(newHabit),
+    );
+    // re-render from db
+    readHabits();
   }
 
   /* Update Habits (check if completion is on or off) */
