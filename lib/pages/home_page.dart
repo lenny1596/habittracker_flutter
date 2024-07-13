@@ -4,6 +4,7 @@ import 'package:habittracker_flutter/models/habit.dart';
 import 'package:habittracker_flutter/database/habit_database.dart';
 // components & utils
 import 'package:habittracker_flutter/components/my_drawer.dart';
+import 'package:habittracker_flutter/components/habit_tile.dart';
 import 'package:habittracker_flutter/utils/habit_utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -60,6 +61,72 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Check habit is on or off
+  void checkHabitOnOff(bool? value, Habit habit) {
+    if (value != null) {
+      context.read<HabitDatabase>().updateOnHabitCompletion(habit.id, value);
+    }
+  }
+
+  // Edit habit box
+  void editHabitBox(Habit habit) {
+    textController.text = habit.name;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: TextField(controller: textController),
+        actions: [
+          // save button
+          MaterialButton(
+            onPressed: () {
+              // save new habit name
+              String newHabit = textController.text;
+              context.read<HabitDatabase>().updateHabitName(habit.id, newHabit);
+              Navigator.pop(context);
+              textController.clear();
+            },
+            child: const Text('Save'),
+          ),
+          // cancel button
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+              textController.clear();
+            },
+            child: const Text('Cancel'),
+          )
+        ],
+      ),
+    );
+  }
+
+  // Delete habit box
+  void deleteHabitBox(Habit habit) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure you want to delete?'),
+        actions: [
+          // delete button
+          MaterialButton(
+            onPressed: () {
+              context.read<HabitDatabase>().deleteHabit(habit.id);
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+          // cancel button
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +160,13 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         final habit = currentHabits[index];
         bool isCompletedToday = isHabitCompletedToday(habit.completedDays);
-        return;
+        return HabitTile(
+          text: habit.name,
+          isCompleted: isCompletedToday,
+          onChanged: (value) => checkHabitOnOff(value, habit),
+          editHabit: (context) => editHabitBox(habit),
+          deleteHabit: (context) => deleteHabitBox(habit),
+        );
       },
     );
   }
