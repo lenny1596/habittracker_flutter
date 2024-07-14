@@ -19,47 +19,56 @@ class HabitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      endActionPane: ActionPane(
-        motion: const StretchMotion(),
-        children: [
-          // edit option
-          SlidableAction(
-            onPressed: editHabit,
-            backgroundColor: Colors.grey.shade800,
-            icon: Icons.settings,
-            borderRadius: BorderRadius.circular(10.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: const StretchMotion(),
+          children: [
+            // edit option
+            SlidableAction(
+              onPressed: editHabit,
+              backgroundColor: Colors.grey.shade800,
+              icon: Icons.settings,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            // delete option
+            SlidableAction(
+              onPressed: deleteHabit,
+              backgroundColor: Colors.red.shade600,
+              icon: Icons.delete,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ],
+        ),
+        child: GestureDetector(
+          onTap: () {
+            if (onChanged != null) {
+              onChanged!(!isCompleted);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: isCompleted
+                    ? Colors.green
+                    : Theme.of(context).colorScheme.secondary),
+            padding: const EdgeInsets.all(12.0),
+            child: ListTile(
+                leading: Checkbox(
+                  activeColor: Colors.green,
+                  value: isCompleted,
+                  onChanged: onChanged,
+                ),
+                title: Text(
+                  text,
+                  style: TextStyle(
+                    color: isCompleted
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                )),
           ),
-          // delete option
-          SlidableAction(
-            onPressed: deleteHabit,
-            backgroundColor: Colors.red.shade600,
-            icon: Icons.delete,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ],
-      ),
-      child: GestureDetector(
-        onTap: () {
-          if (onChanged != null) {
-            onChanged!(!isCompleted);
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: isCompleted
-                  ? Colors.green
-                  : Theme.of(context).colorScheme.secondary),
-          padding: const EdgeInsets.all(12.0),
-          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 25.0),
-          child: ListTile(
-              leading: Checkbox(
-                activeColor: Colors.green,
-                value: isCompleted,
-                onChanged: onChanged,
-              ),
-              title: Text(text)),
         ),
       ),
     );
